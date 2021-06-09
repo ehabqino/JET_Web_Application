@@ -2,9 +2,9 @@
 /*
  * Your dashboard ViewModel code goes here
  */
-define(['accUtils','knockout','ojs/ojarraydataprovider',
-        'ojs/ojlabel','ojs/ojselectsingle','ojs/ojchart'],
- function(accUtils,ko,ArrayDataProvider) {
+define(['accUtils','knockout','jquery','ojs/ojarraydataprovider',
+        'ojs/ojlabel','ojs/ojselectsingle','ojs/ojchart','ojs/ojlistview'],
+ function(accUtils,ko,$,ArrayDataProvider) {
     function DashboardViewModel() {
      var self = this;
      // chart type values array and ArrayDataProvider observable
@@ -12,6 +12,7 @@ define(['accUtils','knockout','ojs/ojarraydataprovider',
        {value:'pie', label:'Pie'},
        {value:'bar', label:'Bar'}
      ];
+
      self.chartTypes = new ArrayDataProvider(types,{keyAttributes:'value'});
 
      //chart selection observable and default value
@@ -31,6 +32,19 @@ define(['accUtils','knockout','ojs/ojarraydataprovider',
   ];
 
   self.chartDataProvider = new ArrayDataProvider(chartData, { keyAttributes: 'id' });  
+
+  var url ="js/store_data.json"; //defines link to local data file
+  self.activityDataProvider = ko.observable(); //gets data for Activities list
+
+  // Get Activities objects from file using jQuery method and a method to return a Promise
+  $.getJSON(url).then(function(data){
+    // Create variable for Activities list and populate using key attribute fetch
+    var activitiesArray = data;
+    self.activityDataProvider(new ArrayDataProvider(activitiesArray, { keyAttributes: 'id' }));
+    //console.log(data)
+  });
+  
+    
 
       this.connected = () => {
         accUtils.announce('Dashboard page loaded.', 'assertive');
