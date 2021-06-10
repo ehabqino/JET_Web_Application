@@ -20,7 +20,14 @@
       </template>
     </oj-list-view>
   </div>
-  <div>
+   <!--The outer container has an empty container and Item Details container-->
+  <div class="oj-flex oj-flex-item">
+  <!--An empty container -->
+    <div class="oj-flex-item">
+
+    </div>  
+    <!-- Item Details container display a chart uponp selection-->
+  <div class="oj-flex-item">
     <h3><oj-label for="basicSelect">Item Details</oj-label></h3>
    
     <hr style="margin-top: 12px;">
@@ -46,6 +53,7 @@
 
       </template>
     </oj-chart>
+  </div>
   </div>
   </div>
 </div>
