@@ -5,7 +5,10 @@
  -->
 <div class="oj-hybrid-padding">
   <h1>Product Information</h1>
-  <div>
+  <!-- The outer container contains all the panels in the application-->
+  <div class="oj-flex oj-flex-init">
+  <!-- The Activities container displays the activities list --> 
+  <div class="oj-flex-item">
     <h3><oj-label for="activitiesList">Activities</oj-label></h3>
     <oj-list-view id="activitiesList" style="font-size: 18px;" data="[[activityDataProvider]]">
       <template slot="itemTemplate">
@@ -44,5 +47,5 @@
       </template>
     </oj-chart>
   </div>
-
+  </div>
 </div>
