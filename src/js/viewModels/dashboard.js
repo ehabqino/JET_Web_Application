@@ -18,7 +18,8 @@ define(['accUtils','knockout','jquery','ojs/ojarraydataprovider',
 
      //chart selection observable and default value
      self.val = ko.observable("pie")
-
+ 
+      
      	  
   // chart data array and  ArrayDataProvider observable
   var chartData = [
