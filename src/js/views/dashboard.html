@@ -13,7 +13,13 @@
     <h3><oj-label for="activitiesList">Activities</oj-label></h3>
     <oj-list-view id="activitiesList" 
                   style="width: 100%; height: 500px; overflow-x: hidden;" 
-                  data="[[activityDataProvider]]">
+                  data="[[activityDataProvider]]" 
+                  selection-mode="single"
+                  selection="{{selectedActivity}}" 
+                  on-selection-changed="[[selectedActivityChanged]]"
+                  first-selected-item="{{firstSelectedActivity}}" 
+                  scroll-policy="loadMoreOnScroll"
+                  scroll-policy-options.fetch-size="5">
       <template slot="itemTemplate">
         <!-- <div>
           <strong>
@@ -36,28 +42,72 @@
       </template>
     </oj-list-view>
   </div>
+  <oj-bind-if test="[[activitySelected()]]">
    <!--The outer container has an empty container and Item Details container-->
   <div class="oj-flex oj-flex-item oj-flex-items-pad oj-md-8 oj-sm-12 ">
   <!--An empty container -->
   <div class="oj-flex-item oj-md-6 oj-sm-12">
-    <div id="container">
-      <oj-module config='[[moduleConfig]]'></oj-module>
-
-    </div>
+    <h3><oj-label for="itemsList">Activity Items</oj-label></h3>
+    <oj-list-view id="itemsList" style="width:100%;height:500px;overflow-x:hidden" 
+                  data="[[itemsDataProvider]]" 
+                  selection-mode="single" selection="{{selectedItem}}" on-selection-changed="[[selectedItemChanged]]"
+                  first-selected-item="{{firstSelectedItem}}" scroll-policy="loadMoreOnScroll"
+                  scroll-policy-options.fetch-size="5"
+                  >
+      <template slot="itemTemplate">
+        <div class="oj-flex" style="flex-wrap: nowrap">
+          <span class="demo-thumbnail oj-flex-item" :style.background-image="[[' url('+$current.data.image+')']]"></span>
+          <div class="demo-content oj-flex-item">
+            <div>
+              <strong>
+                <oj-bind-text value="[[$current.data.name]]"></oj-bind-text>
+              </strong>
+            </div>
+          </div>
+        </div>
+      </template>
+    </oj-list-view>
   </div>  
+
+  <oj-bind-if test="[[itemSelected()]]">
     <!-- Item Details container display a chart uponp selection-->
   <div class="oj-flex-item oj-md-6 oj-sm-12">
     <h3><oj-label for="basicSelect">Item Details</oj-label></h3>
    
     <hr style="margin-top: 12px;">
+    <oj-avatar role="img" size="lg" :aria-label="[['product image for '+ itemData().name]]" :src="[[itemData().image]]"
+           style="float:right;">
+</oj-avatar>
   
-    <oj-label for="basicSelect">Select Chart:</oj-label>
+   <!--  <oj-label for="basicSelect">Select Chart:</oj-label>
     <oj-select-single id="basicSelect"
                       style="max-width: 20em"
                       data="[[chartTypes]]"
                       value="{{val}}">
-    </oj-select-single>
-    <oj-chart id="barChart"
+    </oj-select-single> -->
+
+    <div id="itemName" style="font-size: 20px; font-weight: bolder;">
+      <oj-bind-text value="[[itemData().name]]"></oj-bind-text>
+    </div>
+    <div id="itemDesc" style="font-size: 14px; font-weight: 400; font-style:italic; margin-bottom: 10px;">
+      <oj-bind-text value="[[itemData().short_desc]]"></oj-bind-text>
+    </div>
+    <div id="itemPrice">
+      <oj-bind-text value="[['Price: ' + itemData().price + ' each']]"></oj-bind-text>
+    </div>
+    <div id="itemId">
+      <oj-bind-text value="[['Item Id: ' + itemData().id]]"></oj-bind-text>
+    </div>
+
+    <div>
+      <oj-chart type="pie" series="[[pieSeriesValue]]" animation-on-display="auto"
+                animation-on-data-change="auto" hover-behavior="dim"
+                legend.position="bottom"
+                style="max-width: 400px;width:100%;height:350px;">
+      </oj-chart>
+    </div>
+    
+   <!--  <oj-chart id="barChart"
               type="[[val]]"
               data="[[chartDataProvider]]"
               animation-on-display="auto"
@@ -71,8 +121,20 @@
         </oj-chart-item>
 
       </template>
-    </oj-chart>
+    </oj-chart> -->
   </div>
+</oj-bind-if>
+  <oj-bind-if test="[[!itemSelected()]]">
+    <div class="oj-flex-item oj-sm-12 oj-md-6">
+      <h4>Select an Item to see details</h4>
+    </div>
+  </oj-bind-if>
   </div>
+</oj-bind-if>
+<oj-bind-if test="[[!activitySelected()]]">
+  <div class="oj-flex-item oj-sm-6">
+    <h4>Select an Activity to see Items</h4>
+  </div>
+</oj-bind-if>
   </div>
 </div>
